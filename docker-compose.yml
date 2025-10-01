@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # 你的克隆士兵军团 (工人)
+  z-ai2api:
+    # 直接使用懒人镜像，我们不构建！
+    image: julienol/z-ai2api-python:latest
+    # 我们不直接暴露端口，所有流量都由总管 Nginx 处理
+    env_file:
+      - .env
+    volumes:
+      - ./tokens.txt:/app/tokens.txt:ro
+      - ./data:/app/data
+    restart: unless-stopped
+    # 部署指令：声明你想要 10 个一模一样的克隆士兵！
+    deploy:
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 你的军队总管 (Nginx 负载均衡器)
+  nginx:
+    image: nginx:latest
+    container_name: z-ai-load-balancer
+    ports:
+      # 这是你帝国的唯一大门，所有访客都从这里进
+      - "8084:8084"
+    volumes:
+      # 把你的军规挂载到总管的大脑里
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - z-ai2api # 确保士兵们先列队完毕，总管再上岗
+    restart: unless-stopped
+
+# 定义网络，让士兵和总管可以互相通信
+networks:
+  default:
+    driver: bridge

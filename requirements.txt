@@ -1,0 +1,10 @@
+fastapi
+granian[reload]
+requests
+pydantic
+pydantic-settings
+pydantic-core
+typing-inspection
+fake-useragent
+brotli
+httpx
