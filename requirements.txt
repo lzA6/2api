@@ -1,5 +1,5 @@
 fastapi
-granian[reload]
+uvicorn
 requests
 pydantic
 pydantic-settings
@@ -8,3 +8,12 @@ typing-inspection
 fake-useragent
 brotli
 httpx
+brotli
+fake-useragent
+fastapi
+httpx
+pydantic
+pydantic-settings
+pydantic-core
+requests
+typing-inspection
