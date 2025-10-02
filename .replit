@@ -1,12 +1,16 @@
-# 这一行是核心！它告诉 Replit 应该用哪个确切的命令来启动并持续运行你的服务器。
-run = "granian main:app --host 0.0.0.0 --port 8080"
+modules = ["python-3.11"]
+# 这是最关键的修改：我们强制 Replit 构建一个完整的 Python 3.11 环境。
+[nix]
+channel = "stable-23.11"
+packages = ["cargo", "libiconv", "libxcrypt", "python311", "rustc"]
 
-# 这一行告诉 Replit 的编辑器，你的项目主要入口文件是 main.py，方便它提供帮助。
+# 这是第二关键的修改：我们使用 FastAPI 官方推荐的 uvicorn 来启动服务器。
+# 这将彻底解决所有兼容性问题。
+run = "uvicorn main:app --host 0.0.0.0 --port 8080"
+
+# 这一行保持不变。
 entrypoint = "main.py"
 
 [[ports]]
 localPort = 8080
 externalPort = 8080
-
-[agent]
-expertMode = true
